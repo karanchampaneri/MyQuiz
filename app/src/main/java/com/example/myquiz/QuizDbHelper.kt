@@ -26,27 +26,27 @@ class QuizDbHelper(context: Context) : SQLiteOpenHelper(context, "quiz.db", null
     private fun insertDefaultQuestions(db: SQLiteDatabase) {
         insertQuestion(
             db,
-            "What is the capital of France?",
-            "London", "Berlin", "Paris", "Rome",
-            2
+            "What is the largest mammal in the world?",
+            "Elephant", "Blue Whale", "Great White Shark", "Giraffe",
+            1 // Blue Whale
         )
         insertQuestion(
             db,
-            "What is 2 + 2?",
-            "3", "4", "5", "6",
-            1
+            "Which element has the chemical symbol 'O'?",
+            "Gold", "Oxygen", "Osmium", "Zinc",
+            1 // Oxygen
         )
         insertQuestion(
             db,
-            "Which planet is known as the Red Planet?",
-            "Earth", "Venus", "Mars", "Jupiter",
-            2
+            "In which year did World War II end?",
+            "1942", "1945", "1950", "1939",
+            1 // 1945
         )
         insertQuestion(
             db,
-            "Who wrote Hamlet?",
-            "Shakespeare", "Dickens", "Austen", "Rowling",
-            0
+            "Who painted the Mona Lisa?",
+            "Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Claude Monet",
+            2 // Leonardo da Vinci
         )
     }
 

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -51,11 +52,20 @@ class MainActivity : AppCompatActivity() {
             if (currentIndex < questions.size) {
                 loadQuestion()
             } else {
-                val intent = Intent(this, ResultActivity::class.java)
-                intent.putExtra("score", score)
-                intent.putExtra("total", questions.size)
-                startActivity(intent)
-                finish()
+
+                AlertDialog.Builder(this)
+                    .setTitle("Quiz Complete")
+                    .setMessage("You got $score out of ${questions.size}!\nPlay again?")
+                    .setPositiveButton("Restart") { _, _ ->
+                        currentIndex = 0
+                        score = 0
+                        loadQuestion()
+                    }
+                    .setNegativeButton("Exit") { _, _ ->
+                        finish()
+                    }
+                    .setCancelable(false)
+                    .show()
             }
         }
     }
@@ -83,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         options.forEach { it.isEnabled = false }
 
         if (selectedIndex == correctIndex) {
+            score++
             options[selectedIndex].setBackgroundColor(Color.GREEN)
             score++
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
