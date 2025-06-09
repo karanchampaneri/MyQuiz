@@ -3,6 +3,7 @@ package com.example.myquiz
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questions: List<Question>
     private var currentIndex = 0
     private var hasAnswered = false
+    private var score = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +51,19 @@ class MainActivity : AppCompatActivity() {
             if (currentIndex < questions.size) {
                 loadQuestion()
             } else {
-                Toast.makeText(this, "Quiz complete!", Toast.LENGTH_SHORT).show()
-                finish()
+                AlertDialog.Builder(this)
+                    .setTitle("Quiz Complete")
+                    .setMessage("You got $score out of ${questions.size}!\nPlay again?")
+                    .setPositiveButton("Restart") { _, _ ->
+                        currentIndex = 0
+                        score = 0
+                        loadQuestion()
+                    }
+                    .setNegativeButton("Exit") { _, _ ->
+                        finish()
+                    }
+                    .setCancelable(false)
+                    .show()
             }
         }
     }
@@ -78,6 +91,7 @@ class MainActivity : AppCompatActivity() {
         options.forEach { it.isEnabled = false }
 
         if (selectedIndex == correctIndex) {
+            score++
             options[selectedIndex].setBackgroundColor(Color.GREEN)
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
         } else {

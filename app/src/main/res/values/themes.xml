@@ -11,5 +11,6 @@
     <!-- Customize your theme here. -->
 <!--    <item name="android:forceDarkAllowed">false</item>-->
     <item name="android:windowBackground">@color/backgroundDark</item>
+
 </style>
 </resources>
