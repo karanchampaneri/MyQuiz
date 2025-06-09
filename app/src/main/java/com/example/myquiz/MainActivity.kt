@@ -1,5 +1,6 @@
 package com.example.myquiz
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
@@ -14,12 +15,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questions: List<Question>
     private var currentIndex = 0
     private var hasAnswered = false
+    private var score = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // STEP 1: Bind UI
+        // Bind UI
         questionText = findViewById(R.id.questionText)
         options = listOf(
             findViewById(R.id.optionA),
@@ -29,27 +31,30 @@ class MainActivity : AppCompatActivity() {
         )
         nextButton = findViewById(R.id.nextButton)
 
-        // STEP 2: Load questions from SQLite
+        // Load questions from SQLite
         val db = QuizDbHelper(this)
         questions = db.getAllQuestions()
 
-        // STEP 3: Load the first question
+        // Load the first question
         loadQuestion()
 
-        // STEP 4: Set up option button listeners
+        // Set up option button listeners
         options.forEachIndexed { index, button ->
             button.setOnClickListener {
                 if (!hasAnswered) checkAnswer(index)
             }
         }
 
-        // STEP 5: Next button
+        // Next button logic
         nextButton.setOnClickListener {
             currentIndex++
             if (currentIndex < questions.size) {
                 loadQuestion()
             } else {
-                Toast.makeText(this, "Quiz complete!", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, ResultActivity::class.java)
+                intent.putExtra("score", score)
+                intent.putExtra("total", questions.size)
+                startActivity(intent)
                 finish()
             }
         }
@@ -79,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         if (selectedIndex == correctIndex) {
             options[selectedIndex].setBackgroundColor(Color.GREEN)
+            score++
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
         } else {
             options[selectedIndex].setBackgroundColor(Color.RED)
