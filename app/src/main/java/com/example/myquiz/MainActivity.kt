@@ -1,5 +1,6 @@
 package com.example.myquiz
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.*
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // STEP 1: Bind UI
+        // Bind UI
         questionText = findViewById(R.id.questionText)
         options = listOf(
             findViewById(R.id.optionA),
@@ -31,26 +32,27 @@ class MainActivity : AppCompatActivity() {
         )
         nextButton = findViewById(R.id.nextButton)
 
-        // STEP 2: Load questions from SQLite
+        // Load questions from SQLite
         val db = QuizDbHelper(this)
         questions = db.getAllQuestions()
 
-        // STEP 3: Load the first question
+        // Load the first question
         loadQuestion()
 
-        // STEP 4: Set up option button listeners
+        // Set up option button listeners
         options.forEachIndexed { index, button ->
             button.setOnClickListener {
                 if (!hasAnswered) checkAnswer(index)
             }
         }
 
-        // STEP 5: Next button
+        // Next button logic
         nextButton.setOnClickListener {
             currentIndex++
             if (currentIndex < questions.size) {
                 loadQuestion()
             } else {
+
                 AlertDialog.Builder(this)
                     .setTitle("Quiz Complete")
                     .setMessage("You got $score out of ${questions.size}!\nPlay again?")
@@ -93,6 +95,7 @@ class MainActivity : AppCompatActivity() {
         if (selectedIndex == correctIndex) {
             score++
             options[selectedIndex].setBackgroundColor(Color.GREEN)
+            score++
             Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show()
         } else {
             options[selectedIndex].setBackgroundColor(Color.RED)
